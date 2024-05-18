@@ -8,6 +8,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserService } from '../../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from '../dto/login.dto';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,11 +19,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async register(data: any) {
+  public async register(data: CreateUserDto) {
     return await this.userService.create(data);
   }
 
-  public async login(data: any) {
+  public async login(data: LoginDto) {
     const user = await this.userService.findOneByEmail(data.email);
 
     if (!user) {

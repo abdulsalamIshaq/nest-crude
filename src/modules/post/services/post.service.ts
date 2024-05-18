@@ -1,15 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  Model,
-  DeleteWriteOpResultObject,
-  UpdateWriteOpResult,
-} from 'mongoose';
+import { Model, UpdateWriteOpResult } from 'mongoose';
 import { Post, PostDocument } from '../models/post.model';
-import { PostGateway } from '../../../post/post/post.gateway';
 import { CreatePostDto } from '../dto/create-post.dto';
-import { UpdatePost, UpdatePostDto } from '../dto/update-post.dto';
+import { UpdatePostDto } from '../dto/update-post.dto';
 import CurrentUser from '../../../shared/utils/current-user.util';
+import { PostGateway } from '../gateway/post.gateway';
 
 @Injectable()
 export class PostService {
@@ -70,7 +66,7 @@ export class PostService {
     return updatedPost;
   }
 
-  public async delete(_id: string): Promise<DeleteWriteOpResultObject> {
+  public async delete(_id: string) {
     // Get post or throw if post does not exist
     await this.get(_id);
 
