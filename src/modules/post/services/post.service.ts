@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, UpdateWriteOpResult } from 'mongoose';
 import { Post, PostDocument } from '../models/post.model';
@@ -25,7 +25,7 @@ export class PostService {
 
     // Check if post exist
     if (!post) {
-      throw new BadRequestException('Post not found');
+      throw new NotFoundException('Post not found');
     }
 
     return post;
@@ -45,32 +45,26 @@ export class PostService {
     return post;
   }
 
-  public async update(
-    _id: string,
-    data: UpdatePostDto,
-  ): Promise<UpdateWriteOpResult> {
+  public async update(_id: string, data: UpdatePostDto): Promise<Post> {
     // Get post or throw if post does not exist
     const post = await this.get(_id);
 
-    const dataToUpdate = {
-      title: data.title,
-      content: data.content,
-    };
+    post.title = data.title;
+    post.content = data.content;
 
-    // Update post
-    const updatedPost = await this.postModel.updateOne({ _id }, dataToUpdate);
+    const updatedPost = await post.save();
 
     // Emit updatePost event
-    this.postGateway.updatePostEvent(Object.assign(post, dataToUpdate));
+    this.postGateway.updatePostEvent(updatedPost);
 
     return updatedPost;
   }
 
-  public async delete(_id: string) {
+  public async delete(_id: string): Promise<null> {
     // Get post or throw if post does not exist
     await this.get(_id);
 
     // Delete post
-    return await this.postModel.deleteOne({ _id });
+    return null;
   }
 }

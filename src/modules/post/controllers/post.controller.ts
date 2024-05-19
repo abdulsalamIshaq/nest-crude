@@ -1,34 +1,59 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
+import { Public } from '../../auth/decorators/public.decorator';
 
 @Controller('post')
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @HttpCode(HttpStatus.OK)
+  /**
+   * Create post
+   */
   @Post('')
   create(@Body() payload: CreatePostDto) {
     return this.postService.create(payload);
   }
 
-  @HttpCode(HttpStatus.OK)
+  /**
+   * Get all posts
+   */
+  @Public()
   @Get('')
   all() {
     return this.postService.all();
   }
 
-  @HttpCode(HttpStatus.OK)
+  /**
+   * Get a post
+   */
+  @Public()
   @Get(':id')
   get(@Param('id') id: string) {
     return this.postService.get(id);
+  }
+
+  /**
+   * Update post
+   */
+  @Put(':id')
+  update(@Param('id') id: string, @Body() payload: CreatePostDto) {
+    return this.postService.update(id, payload);
+  }
+
+  /**
+   * Delete post
+   */
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.postService.delete(id);
   }
 }
