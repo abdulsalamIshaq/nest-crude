@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-export class CreatePostDto {
+export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
@@ -8,5 +8,5 @@ export class CreatePostDto {
 
   @IsString()
   @IsNotEmpty()
-  content: string;
+  description: string;
 }

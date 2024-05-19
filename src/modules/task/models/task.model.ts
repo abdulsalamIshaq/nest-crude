@@ -1,18 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, HydratedDocument, Types } from 'mongoose';
 
-export type PostDocument = HydratedDocument<Post>;
+export type TaskDocument = HydratedDocument<Task>;
 
 @Schema({ timestamps: true })
-export class Post extends Document {
+export class Task extends Document {
   @Prop({ required: true })
   title: string;
 
   @Prop({ required: true })
-  content: string;
+  description: string;
+
+  @Prop({ default: false })
+  isCompleted: boolean;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   user: Types.ObjectId;
 }
 
-export const PostSchema = SchemaFactory.createForClass(Post);
+export const TaskSchema = SchemaFactory.createForClass(Task);
