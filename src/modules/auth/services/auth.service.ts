@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { User, UserDocument } from '../../user/models/user.model';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../dto/login.dto';
@@ -15,7 +8,6 @@ import * as argon2 from 'argon2';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private postModel: Model<UserDocument>,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
